@@ -27,6 +27,14 @@ class CustomerManagementApplicationTests {
 
 	}
 	@Test
+	public void shouldReturnListOfCustomersWhenExistsByPhoneNumberTest(){
+
+	}
+	@Test
+	public void shouldReturnListOfCustomersWhenNotExistsByPhoneNumberTest(){
+
+	}
+	@Test
 	public void shouldAddCustomerWhenNotExistsTest(){
 
 	}
