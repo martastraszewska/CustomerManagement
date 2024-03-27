@@ -14,6 +14,7 @@ public class Customer {
     private String id;
     private String firstName;
     private String lastName;
+    private String companyName;
     private String emailAddress;
     private String city;
     private String street;
@@ -26,6 +27,7 @@ public class Customer {
                 .id(UUID.randomUUID().toString())
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
+                .companyName(request.getCompanyName())
                 .emailAddress(request.getEmailAddress())
                 .city(request.getCity())
                 .street(request.getStreet())

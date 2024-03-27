@@ -95,7 +95,6 @@ class CustomerManagementApplicationTests {
         Assert.assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
         Assert.assertEquals(errorMessage, res.getBody().getErrorMessage());
     }
-
     public static List<Arguments> testValidationInput() {
         return List.of(
                 Arguments.of(
@@ -104,6 +103,9 @@ class CustomerManagementApplicationTests {
                 Arguments.of(
                         CustomerRequestBuilder.builder().setLastName("dummyNamedummyNamedummyNamedummyNamedummyNamed").build(),
                         LAST_NAME_CANNOT_BE_LONGER_THAN_45_CHARACTERS),
+                Arguments.of(
+                        CustomerRequestBuilder.builder().setCompanyName("dummyNamedummyNamedummyNamedummyNamedummyNamed").build(),
+                        COMPANY_NAME_CANNOT_BE_LONGER_THAN_45_CHARACTERS),
                 Arguments.of(
                         CustomerRequestBuilder.builder().setEmailAddress("dummy-email").build(),
                         INVALID_ADDRESS_EMAIL_PATTERN),

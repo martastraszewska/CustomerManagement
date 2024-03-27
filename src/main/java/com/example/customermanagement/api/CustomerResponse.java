@@ -13,6 +13,7 @@ public class CustomerResponse {
     private String id;
     private String firstName;
     private String lastName;
+    private String companyName;
     private String emailAddress;
     private String city;
     private String street;
@@ -24,6 +25,7 @@ public class CustomerResponse {
                     .id(customer.getId())
                     .firstName(customer.getFirstName())
                     .lastName(customer.getLastName())
+                    .companyName(customer.getCompanyName())
                     .emailAddress(customer.getEmailAddress())
                     .city(customer.getCity())
                     .street(customer.getStreet())
