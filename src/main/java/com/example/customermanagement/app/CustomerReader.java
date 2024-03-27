@@ -1,4 +1,4 @@
-package com.example.customermanagement.domain;
+package com.example.customermanagement.app;
 
 import java.util.Optional;
 

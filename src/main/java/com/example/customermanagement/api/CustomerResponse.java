@@ -1,9 +1,14 @@
 package com.example.customermanagement.api;
 
-import com.example.customermanagement.domain.Customer;
+import com.example.customermanagement.app.Customer;
 import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+
+import java.time.Instant;
 
 @Builder
+@Getter
 public class CustomerResponse {
     private String id;
     private String firstName;
@@ -14,10 +19,11 @@ public class CustomerResponse {
     private String phoneNumber;
     private String lastOverviewDate;
 
-    public static CustomerResponse from(Customer customer){
+    public static CustomerResponse from (Customer customer){
             return CustomerResponse.builder()
                     .id(customer.getId())
                     .firstName(customer.getFirstName())
+                    .lastName(customer.getLastName())
                     .emailAddress(customer.getEmailAddress())
                     .city(customer.getCity())
                     .street(customer.getStreet())
