@@ -1,7 +1,11 @@
 package com.example.customermanagement.app;
 
 import com.example.customermanagement.api.CustomerRequest;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 

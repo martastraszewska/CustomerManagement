@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 public class CreateCustomerService {
 
     @Autowired
-    private  CustomerStorage customerStorage;
+    private CustomerStorage customerStorage;
 
-    public Customer createCustomer(CustomerRequest request){
+    public Customer createCustomer(CustomerRequest request) {
         new Validator().validateCustomer(request);
         Customer customer = Customer.create(request);
         return customerStorage.store(customer);
