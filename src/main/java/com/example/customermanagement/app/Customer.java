@@ -40,4 +40,17 @@ public class Customer {
                 .build();
     }
 
+    public static Customer update(String id, CustomerRequest request) {
+        return Customer.builder()
+                .id(id)
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .companyName(request.getCompanyName())
+                .emailAddress(request.getEmailAddress())
+                .city(request.getCity())
+                .street(request.getStreet())
+                .phoneNumber(request.getPhoneNumber())
+                .lastOverviewDate(request.getLastOverviewDate())
+                .build();
+    }
 }

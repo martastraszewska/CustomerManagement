@@ -2,6 +2,7 @@ package com.example.customermanagement.api;
 
 import com.example.customermanagement.app.CreateCustomerService;
 import com.example.customermanagement.app.Customer;
+import com.example.customermanagement.app.UpdateCustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,8 @@ public class CustomerController {
 
     @Autowired
     private CreateCustomerService createCustomerService;
+    @Autowired
+    private UpdateCustomerService updateCustomerService;
 
     @PostMapping
     public ResponseEntity<CustomerResponse> createCustomer(@RequestBody CustomerRequest customerRequest) {
@@ -33,8 +36,10 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public CustomerResponse updateCustomer(@PathVariable String id, @RequestBody CustomerRequest customerRequest) {
-        return null;
+    public ResponseEntity<CustomerResponse> updateCustomer(@PathVariable String id,
+                                                           @RequestBody CustomerRequest customerRequest) {
+        Customer customer = updateCustomerService.updateCustomer(id, customerRequest);
+        return ResponseEntity.ok(CustomerResponse.from(customer));
     }
 
     @DeleteMapping("/{id}")
