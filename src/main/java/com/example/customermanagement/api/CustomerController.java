@@ -2,6 +2,7 @@ package com.example.customermanagement.api;
 
 import com.example.customermanagement.app.CreateCustomerService;
 import com.example.customermanagement.app.Customer;
+import com.example.customermanagement.app.DeleteCustomerService;
 import com.example.customermanagement.app.UpdateCustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,8 @@ public class CustomerController {
     private CreateCustomerService createCustomerService;
     @Autowired
     private UpdateCustomerService updateCustomerService;
+    @Autowired
+    private DeleteCustomerService deleteCustomerService;
 
     @PostMapping
     public ResponseEntity<CustomerResponse> createCustomer(@RequestBody CustomerRequest customerRequest) {
@@ -45,6 +48,7 @@ public class CustomerController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCustomer(@PathVariable String id) {
+        deleteCustomerService.deleteCustomer(id);
     }
 
     @GetMapping("/{id}")
