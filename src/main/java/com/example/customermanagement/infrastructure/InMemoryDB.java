@@ -2,6 +2,7 @@ package com.example.customermanagement.infrastructure;
 
 import com.example.customermanagement.app.Customer;
 import com.example.customermanagement.app.CustomerReader;
+import com.example.customermanagement.app.CustomerRemover;
 import com.example.customermanagement.app.CustomerStorage;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Component
-public class InMemoryDB implements CustomerReader, CustomerStorage {
+public class InMemoryDB implements CustomerReader, CustomerStorage, CustomerRemover {
 
     public static List<Customer> storage = new ArrayList<>();
 
@@ -30,6 +31,10 @@ public class InMemoryDB implements CustomerReader, CustomerStorage {
         return customer;
     }
 
+    @Override
+    public void deleteCustomer(String id) {
+        storage.removeIf(c -> Objects.equals(c.getId(), id));
+    }
 
     public int size() {
         return storage.size();

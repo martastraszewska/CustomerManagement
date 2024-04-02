@@ -9,7 +9,6 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -174,6 +173,7 @@ class CustomerManagementApplicationTests {
         assertEquals(404, res.getStatusCode().value());
         assertEquals(String.format(CUSTOMER_NOT_FOUND_MSG, customerId), res.getBody().getErrorMessage());
     }
+
     @ParameterizedTest
     @MethodSource("testValidationInput")
     public void shouldReturnErrorMessageOnUpdateWhenInvalidRequestOccursTest(CustomerRequest req, String errorMessage) {
@@ -190,19 +190,33 @@ class CustomerManagementApplicationTests {
         Assert.assertEquals(errorMessage, res.getBody().getErrorMessage());
     }
 
-    @Test
-    public void shouldReturnListOfCustomersWhenQueryForNextOverviewTest() {
-
-    }
 
     @Test
     public void shouldDeleteCustomerWhenExistsTest() {
+        //given
+        CustomerRequest reqExisting = CustomerRequestBuilder.builder().build();
+        Customer existing = Customer.create(reqExisting);
+        customerStorage.store(existing);
+        //when
+        ResponseEntity<Void> res = this.testRestTemplate.exchange
+                ("/api/v1/customers/" + existing.getId(), HttpMethod.DELETE, HttpEntity.EMPTY, Void.class);
+        //then
+        assertEquals(HttpStatus.NO_CONTENT, res.getStatusCode());
+        //and
+        assertEquals(0, customerStorage.size());
 
     }
 
     @Test
     public void shouldReturn404OnDeleteWhenCustomerNotExistsTest() {
-
+        //when
+        String customerId = "dummy-id";
+        ResponseEntity<ErrorResponse> res = this.testRestTemplate.exchange
+                ("/api/v1/customers/" + customerId, HttpMethod.DELETE, HttpEntity.EMPTY, ErrorResponse.class);
+        //then
+        assertEquals(404, res.getStatusCode().value());
+        //and
+        assertEquals(String.format(CUSTOMER_NOT_FOUND_MSG, customerId), res.getBody().getErrorMessage());
     }
 
 }
