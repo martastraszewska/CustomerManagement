@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.Instant;
 import java.util.List;
 
 import static com.example.customermanagement.app.validators.CustomerNotFoundException.CUSTOMER_NOT_FOUND_MSG;
@@ -88,6 +89,8 @@ class CustomerManagementApplicationTests {
         Assert.assertEquals(req.getStreet(), body.getStreet());
         Assert.assertEquals(req.getPhoneNumber(), body.getPhoneNumber());
         Assert.assertEquals(req.getLastOverviewDate(), body.getLastOverviewDate());
+        Assert.assertTrue(customerStorage.findById(body.getId()).get().getCreatedAt().isAfter(Instant.now().minusSeconds(2)));
+        Assert.assertTrue(customerStorage.findById(body.getId()).get().getCreatedAt().isBefore(Instant.now()));
     }
 
     @ParameterizedTest

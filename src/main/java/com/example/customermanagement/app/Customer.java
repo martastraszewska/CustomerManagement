@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -24,6 +27,8 @@ public class Customer {
     private String street;
     private String phoneNumber;
     private String lastOverviewDate;
+    private Instant createdAt;
+    private Instant updatedAt;
 
 
     public static Customer create(CustomerRequest request) {
@@ -37,20 +42,21 @@ public class Customer {
                 .street(request.getStreet())
                 .phoneNumber(request.getPhoneNumber())
                 .lastOverviewDate(request.getLastOverviewDate())
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
                 .build();
     }
 
-    public static Customer update(String id, CustomerRequest request) {
-        return Customer.builder()
-                .id(id)
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .companyName(request.getCompanyName())
-                .emailAddress(request.getEmailAddress())
-                .city(request.getCity())
-                .street(request.getStreet())
-                .phoneNumber(request.getPhoneNumber())
-                .lastOverviewDate(request.getLastOverviewDate())
-                .build();
+    public Customer update(CustomerRequest request) {
+        this.firstName = request.getFirstName();
+        this.lastName = request.getLastName();
+        this.companyName = request.getCompanyName();
+        this.emailAddress = request.getEmailAddress();
+        this.city = request.getCity();
+        this.street = request.getStreet();
+        this.phoneNumber = request.getPhoneNumber();
+        this.lastOverviewDate = request.getLastOverviewDate();
+        this.updatedAt = Instant.now();
+        return this;
     }
 }

@@ -1,7 +1,6 @@
 package com.example.customermanagement.infrastructure;
 
 import com.example.customermanagement.app.Customer;
-import com.example.customermanagement.app.CustomerExistsByIdReader;
 import com.example.customermanagement.app.CustomerReader;
 import com.example.customermanagement.app.CustomerStorage;
 import org.springframework.stereotype.Component;
@@ -12,9 +11,9 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Component
-public class InMemoryDB implements CustomerReader, CustomerStorage, CustomerExistsByIdReader {
+public class InMemoryDB implements CustomerReader, CustomerStorage {
 
-    private static List<Customer> storage = new ArrayList<>();
+    public static List<Customer> storage = new ArrayList<>();
 
 
     @Override
@@ -31,10 +30,6 @@ public class InMemoryDB implements CustomerReader, CustomerStorage, CustomerExis
         return customer;
     }
 
-    @Override
-    public boolean existsById(String id) {
-        return storage.stream().anyMatch(c -> Objects.equals(c.getId(), id));
-    }
 
     public int size() {
         return storage.size();
