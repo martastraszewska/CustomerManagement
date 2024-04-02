@@ -6,6 +6,7 @@ import com.example.customermanagement.api.ErrorResponse;
 import com.example.customermanagement.app.Customer;
 import com.example.customermanagement.infrastructure.InMemoryDB;
 import org.junit.Assert;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -37,38 +38,9 @@ class CustomerManagementApplicationTests {
     @Autowired
     private InMemoryDB customerStorage;
 
-    @Test
-    void contextLoads() {
-    }
-
-    @Test
-    public void shouldReturnListOfCustomersWhenExistsByLastNameTest() {
-
-    }
-
-    @Test
-    public void shouldReturnEmptyListWhenCustomerNotExistsByLastNameTest() {
-
-    }
-
-    @Test
-    public void shouldReturnListOfCustomersWhenExistsByCityTest() {
-
-    }
-
-    @Test
-    public void shouldReturnEmptyListWhenCustomerNotExistsByCityTest() {
-
-    }
-
-    @Test
-    public void shouldReturnListOfCustomersWhenExistsByPhoneNumberTest() {
-
-    }
-
-    @Test
-    public void shouldReturnListOfCustomersWhenNotExistsByPhoneNumberTest() {
-
+    @BeforeEach
+    void before() {
+        customerStorage.deleteAll();
     }
 
     @Test
@@ -101,6 +73,35 @@ class CustomerManagementApplicationTests {
         //then
         Assert.assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
         Assert.assertEquals(errorMessage, res.getBody().getErrorMessage());
+    }
+
+    @Test
+    public void shouldCreateCustomerWithEmptyDataTest() {
+        //when
+        CustomerRequest req = CustomerRequestBuilder.builder().build();
+        req.setFirstName(null);
+        req.setLastName(null);
+        req.setCompanyName(null);
+        req.setCity(null);
+        req.setEmailAddress(null);
+        req.setStreet(null);
+        req.setPhoneNumber(null);
+        req.setLastOverviewDate(null);
+        HttpEntity<CustomerRequest> request = new HttpEntity<>(req, new HttpHeaders());
+        ResponseEntity<CustomerResponse> res = this.testRestTemplate.postForEntity("/api/v1/customers", request, CustomerResponse.class);
+        CustomerResponse body = res.getBody();
+        //then
+        Assert.assertEquals("/api/v1/customers/" + body.getId(), res.getHeaders().getLocation().toString());
+        Assert.assertEquals(201, res.getStatusCode().value());
+        Assert.assertEquals(req.getFirstName(), body.getFirstName());
+        Assert.assertEquals(req.getLastName(), body.getLastName());
+        Assert.assertEquals(req.getEmailAddress(), body.getEmailAddress());
+        Assert.assertEquals(req.getCity(), body.getCity());
+        Assert.assertEquals(req.getStreet(), body.getStreet());
+        Assert.assertEquals(req.getPhoneNumber(), body.getPhoneNumber());
+        Assert.assertEquals(req.getLastOverviewDate(), body.getLastOverviewDate());
+        Assert.assertTrue(customerStorage.findById(body.getId()).get().getCreatedAt().isAfter(Instant.now().minusSeconds(2)));
+        Assert.assertTrue(customerStorage.findById(body.getId()).get().getCreatedAt().isBefore(Instant.now()));
     }
 
     public static List<Arguments> testValidationInput() {
@@ -172,6 +173,41 @@ class CustomerManagementApplicationTests {
         //then
         assertEquals(404, res.getStatusCode().value());
         assertEquals(String.format(CUSTOMER_NOT_FOUND_MSG, customerId), res.getBody().getErrorMessage());
+    }
+
+    @Test
+    public void shouldUpdateCustomerWithEmptyDataTest() {
+        //given
+        CustomerRequest req = CustomerRequestBuilder.builder().build();
+        Customer existing = Customer.create(req);
+        customerStorage.store(existing);
+        //when
+        CustomerRequest reqUpdate = CustomerRequestBuilder.builder().build();
+        reqUpdate.setFirstName(null);
+        reqUpdate.setLastName(null);
+        reqUpdate.setCompanyName(null);
+        reqUpdate.setCity(null);
+        reqUpdate.setEmailAddress(null);
+        reqUpdate.setStreet(null);
+        reqUpdate.setPhoneNumber(null);
+        reqUpdate.setLastOverviewDate(null);
+        HttpEntity<CustomerRequest> request = new HttpEntity<>(reqUpdate, new HttpHeaders());
+        ResponseEntity<CustomerResponse> res = this.testRestTemplate.exchange(
+                "/api/v1/customers/" + existing.getId(), HttpMethod.PUT, request, CustomerResponse.class);
+        CustomerResponse body = res.getBody();
+        //then
+        assertEquals(HttpStatus.OK, res.getStatusCode());
+        //and
+        assertEquals(1, customerStorage.size());
+        //and
+        assertEquals(existing.getId(), body.getId());
+        assertEquals(existing.getFirstName(), body.getFirstName());
+        assertEquals(existing.getLastName(), body.getLastName());
+        assertEquals(existing.getCompanyName(), body.getCompanyName());
+        assertEquals(existing.getCity(), body.getCity());
+        assertEquals(existing.getStreet(), body.getStreet());
+        assertEquals(existing.getLastOverviewDate(), body.getLastOverviewDate());
+        assertEquals(reqUpdate.getPhoneNumber(), body.getPhoneNumber());
     }
 
     @ParameterizedTest

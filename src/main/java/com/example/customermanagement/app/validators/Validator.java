@@ -32,19 +32,28 @@ public class Validator {
     }
 
     public void validateCustomer(CustomerRequest request) {
-        throwIf(request.getFirstName().length() > 45, FIRST_NAME_CANNOT_BE_LONGER_THAN_45_CHARACTERS);
-        throwIf(request.getLastName().length() > 45, LAST_NAME_CANNOT_BE_LONGER_THAN_45_CHARACTERS);
-        throwIf(request.getCompanyName().length() > 45, COMPANY_NAME_CANNOT_BE_LONGER_THAN_45_CHARACTERS);
-        throwIf(!pattern.matcher(request.getEmailAddress()).matches(), INVALID_ADDRESS_EMAIL_PATTERN);
-        throwIf(request.getCity().length() > 45, CITY_CANNOT_BE_LONGER_THAN_45_CHARACTERS);
-        throwIf(request.getStreet().length() > 45, STREET_CANNOT_BE_LONGER_THAN_45_CHARACTERS);
-        throwIf(request.getPhoneNumber().length() > 9, PHONE_NUMBER_CANNOT_BE_LONGER_THAN_9_CHARACTERS);
+        throwIf(request.getFirstName() != null && request.getFirstName().length() > 45,
+                FIRST_NAME_CANNOT_BE_LONGER_THAN_45_CHARACTERS);
+        throwIf(request.getLastName() != null && request.getLastName().length() > 45,
+                LAST_NAME_CANNOT_BE_LONGER_THAN_45_CHARACTERS);
+        throwIf(request.getCompanyName() != null && request.getCompanyName().length() > 45,
+                COMPANY_NAME_CANNOT_BE_LONGER_THAN_45_CHARACTERS);
+        throwIf(request.getEmailAddress() != null && !pattern.matcher(request.getEmailAddress()).matches(),
+                INVALID_ADDRESS_EMAIL_PATTERN);
+        throwIf(request.getCity() != null && request.getCity().length() > 45,
+                CITY_CANNOT_BE_LONGER_THAN_45_CHARACTERS);
+        throwIf(request.getStreet() != null && request.getStreet().length() > 45,
+                STREET_CANNOT_BE_LONGER_THAN_45_CHARACTERS);
+        throwIf(request.getPhoneNumber() != null && request.getPhoneNumber().length() > 9,
+                PHONE_NUMBER_CANNOT_BE_LONGER_THAN_9_CHARACTERS);
         validateDate(request.getLastOverviewDate(), INVALID_DATE_PATTERN);
     }
 
     private void validateDate(String date, String msg) {
         try {
-            dateFormat.parse(date);
+            if (date != null) {
+                dateFormat.parse(date);
+            }
         } catch (ParseException e) {
             throw new InvalidCustomerException(msg);
         }
