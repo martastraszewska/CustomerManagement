@@ -4,11 +4,12 @@ import com.example.customermanagement.api.CustomerRequest;
 import com.example.customermanagement.api.CustomerResponse;
 import com.example.customermanagement.api.ErrorResponse;
 import com.example.customermanagement.app.Customer;
-import com.example.customermanagement.app.validators.Validator;
+import com.example.customermanagement.infrastructure.InMemoryDB;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +17,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.net.URI;
+import java.time.Instant;
 import java.util.List;
 
+import static com.example.customermanagement.app.validators.CustomerNotFoundException.CUSTOMER_NOT_FOUND_MSG;
 import static com.example.customermanagement.app.validators.Validator.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
@@ -31,6 +35,8 @@ class CustomerManagementApplicationTests {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
+    @Autowired
+    private InMemoryDB customerStorage;
 
     @Test
     void contextLoads() {
@@ -83,11 +89,13 @@ class CustomerManagementApplicationTests {
         Assert.assertEquals(req.getStreet(), body.getStreet());
         Assert.assertEquals(req.getPhoneNumber(), body.getPhoneNumber());
         Assert.assertEquals(req.getLastOverviewDate(), body.getLastOverviewDate());
+        Assert.assertTrue(customerStorage.findById(body.getId()).get().getCreatedAt().isAfter(Instant.now().minusSeconds(2)));
+        Assert.assertTrue(customerStorage.findById(body.getId()).get().getCreatedAt().isBefore(Instant.now()));
     }
 
     @ParameterizedTest
     @MethodSource("testValidationInput")
-    public void shouldReturnErrorMessageWhenInvalidRequestOccursTest(CustomerRequest req, String errorMessage) {
+    public void shouldReturnErrorMessageOnCreateWhenInvalidRequestOccursTest(CustomerRequest req, String errorMessage) {
         //when
         HttpEntity<CustomerRequest> request = new HttpEntity<>(req, new HttpHeaders());
         ResponseEntity<ErrorResponse> res = this.testRestTemplate.postForEntity("/api/v1/customers", request, ErrorResponse.class);
@@ -95,6 +103,7 @@ class CustomerManagementApplicationTests {
         Assert.assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
         Assert.assertEquals(errorMessage, res.getBody().getErrorMessage());
     }
+
     public static List<Arguments> testValidationInput() {
         return List.of(
                 Arguments.of(
@@ -126,27 +135,73 @@ class CustomerManagementApplicationTests {
 
 
     @Test
+    public void shouldUpdateCustomerWhenExistsTest() {
+        //given
+        CustomerRequest req = CustomerRequestBuilder.builder().build();
+        Customer existing = Customer.create(req);
+        customerStorage.store(existing);
+        //when
+        CustomerRequest reqUpdate = CustomerRequestBuilder.builder().setPhoneNumber("newNumber").build();
+        HttpEntity<CustomerRequest> request = new HttpEntity<>(reqUpdate, new HttpHeaders());
+        ResponseEntity<CustomerResponse> res = this.testRestTemplate.exchange(
+                "/api/v1/customers/" + existing.getId(), HttpMethod.PUT, request, CustomerResponse.class);
+        CustomerResponse body = res.getBody();
+        //then
+        assertEquals(HttpStatus.OK, res.getStatusCode());
+        //and
+        assertEquals(1, customerStorage.size());
+        //and
+        assertEquals(existing.getId(), body.getId());
+        assertEquals(existing.getFirstName(), body.getFirstName());
+        assertEquals(existing.getLastName(), body.getLastName());
+        assertEquals(existing.getCompanyName(), body.getCompanyName());
+        assertEquals(existing.getCity(), body.getCity());
+        assertEquals(existing.getStreet(), body.getStreet());
+        assertEquals(existing.getLastOverviewDate(), body.getLastOverviewDate());
+        assertEquals(reqUpdate.getPhoneNumber(), body.getPhoneNumber());
+    }
+
+
+    @Test
+    public void shouldReturn404OnUpdateWhenCustomerNotExistsTest() {
+        //when
+        CustomerRequest req = CustomerRequestBuilder.builder().setPhoneNumber("newNumber").build();
+        HttpEntity<CustomerRequest> request = new HttpEntity<>(req, new HttpHeaders());
+        String customerId = "dummy-id";
+        ResponseEntity<ErrorResponse> res = this.testRestTemplate.exchange(
+                "/api/v1/customers/" + customerId, HttpMethod.PUT, request, ErrorResponse.class);
+        //then
+        assertEquals(404, res.getStatusCode().value());
+        assertEquals(String.format(CUSTOMER_NOT_FOUND_MSG, customerId), res.getBody().getErrorMessage());
+    }
+    @ParameterizedTest
+    @MethodSource("testValidationInput")
+    public void shouldReturnErrorMessageOnUpdateWhenInvalidRequestOccursTest(CustomerRequest req, String errorMessage) {
+        //given
+        CustomerRequest reqExisting = CustomerRequestBuilder.builder().build();
+        Customer existing = Customer.create(reqExisting);
+        customerStorage.store(existing);
+        //when
+        HttpEntity<CustomerRequest> request = new HttpEntity<>(req, new HttpHeaders());
+        ResponseEntity<ErrorResponse> res = this.testRestTemplate.exchange
+                ("/api/v1/customers/" + existing.getId(), HttpMethod.PUT, request, ErrorResponse.class);
+        //then
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, res.getStatusCode());
+        Assert.assertEquals(errorMessage, res.getBody().getErrorMessage());
+    }
+
+    @Test
+    public void shouldReturnListOfCustomersWhenQueryForNextOverviewTest() {
+
+    }
+
+    @Test
     public void shouldDeleteCustomerWhenExistsTest() {
 
     }
 
     @Test
     public void shouldReturn404OnDeleteWhenCustomerNotExistsTest() {
-
-    }
-
-    @Test
-    public void shouldUpdateCustomerWhenExistsTest() {
-
-    }
-
-    @Test
-    public void shouldReturn404OnUpdateWhenCustomerNotExistsTest() {
-
-    }
-
-    @Test
-    public void shouldReturnListOfCustomersWhenQueryForNextOverviewTest() {
 
     }
 
