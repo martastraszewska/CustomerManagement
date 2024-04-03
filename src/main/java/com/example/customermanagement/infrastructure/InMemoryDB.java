@@ -39,4 +39,8 @@ public class InMemoryDB implements CustomerReader, CustomerStorage, CustomerRemo
     public int size() {
         return storage.size();
     }
+
+    public void deleteAll() {
+        storage.clear();
+    }
 }
