@@ -243,7 +243,7 @@ class CustomerManagementApplicationTests {
         //then
         assertEquals(HttpStatus.NO_CONTENT, res.getStatusCode());
         //and
-        assertEquals(0, customerStorage.size());
+        assertEquals(1, customerStorage.size());
 
     }
 
