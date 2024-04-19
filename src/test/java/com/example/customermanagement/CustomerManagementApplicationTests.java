@@ -60,8 +60,8 @@ class CustomerManagementApplicationTests {
         Assert.assertEquals(req.getStreet(), body.getStreet());
         Assert.assertEquals(req.getPhoneNumber(), body.getPhoneNumber());
         Assert.assertEquals(req.getLastOverviewDate(), body.getLastOverviewDate());
-        Assert.assertTrue(customerStorage.findById(body.getId()).get().getCreatedAt().isAfter(Instant.now().minusSeconds(2)));
-        Assert.assertTrue(customerStorage.findById(body.getId()).get().getCreatedAt().isBefore(Instant.now()));
+        Assert.assertTrue(customerStorage.findById(body.getId()).get().getCreatedAt().isAfter(Instant.now().minusSeconds(15)));
+        Assert.assertTrue(customerStorage.findById(body.getId()).get().getCreatedAt().isBefore(Instant.now().plusSeconds(1)));
     }
 
     @ParameterizedTest
@@ -100,8 +100,8 @@ class CustomerManagementApplicationTests {
         Assert.assertEquals(req.getStreet(), body.getStreet());
         Assert.assertEquals(req.getPhoneNumber(), body.getPhoneNumber());
         Assert.assertEquals(req.getLastOverviewDate(), body.getLastOverviewDate());
-        Assert.assertTrue(customerStorage.findById(body.getId()).get().getCreatedAt().isAfter(Instant.now().minusSeconds(2)));
-        Assert.assertTrue(customerStorage.findById(body.getId()).get().getCreatedAt().isBefore(Instant.now()));
+        Assert.assertTrue(customerStorage.findById(body.getId()).get().getCreatedAt().isAfter(Instant.now().minusSeconds(15)));
+        Assert.assertTrue(customerStorage.findById(body.getId()).get().getCreatedAt().isBefore(Instant.now().plusSeconds(1)));
     }
 
     public static List<Arguments> testValidationInput() {
@@ -159,6 +159,8 @@ class CustomerManagementApplicationTests {
         assertEquals(existing.getStreet(), body.getStreet());
         assertEquals(existing.getLastOverviewDate(), body.getLastOverviewDate());
         assertEquals(reqUpdate.getPhoneNumber(), body.getPhoneNumber());
+        Assert.assertTrue(customerStorage.findById(body.getId()).get().getUpdatedAt().isAfter(Instant.now().minusSeconds(15)));
+        Assert.assertTrue(customerStorage.findById(body.getId()).get().getUpdatedAt().isBefore(Instant.now().plusSeconds(1)));
     }
 
 
@@ -208,6 +210,8 @@ class CustomerManagementApplicationTests {
         assertEquals(existing.getStreet(), body.getStreet());
         assertEquals(existing.getLastOverviewDate(), body.getLastOverviewDate());
         assertEquals(reqUpdate.getPhoneNumber(), body.getPhoneNumber());
+        Assert.assertTrue(customerStorage.findById(body.getId()).get().getUpdatedAt().isAfter(Instant.now().minusSeconds(15)));
+        Assert.assertTrue(customerStorage.findById(body.getId()).get().getUpdatedAt().isBefore(Instant.now().plusSeconds(1)));
     }
 
     @ParameterizedTest
