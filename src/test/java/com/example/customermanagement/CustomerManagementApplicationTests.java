@@ -55,10 +55,11 @@ class CustomerManagementApplicationTests {
         Assert.assertEquals(201, res.getStatusCode().value());
         Assert.assertEquals(req.getFirstName(), body.getFirstName());
         Assert.assertEquals(req.getLastName(), body.getLastName());
-        Assert.assertEquals(req.getEmailAddress(), body.getEmailAddress());
+        Assert.assertEquals(req.getCompany(), body.getCompany());
         Assert.assertEquals(req.getCity(), body.getCity());
         Assert.assertEquals(req.getStreet(), body.getStreet());
         Assert.assertEquals(req.getPhoneNumber(), body.getPhoneNumber());
+        Assert.assertEquals(req.getEmailAddress(), body.getEmailAddress());
         Assert.assertEquals(req.getLastOverviewDate(), body.getLastOverviewDate());
         Assert.assertTrue(customerStorage.findById(body.getId()).get().getCreatedAt().isAfter(Instant.now().minusSeconds(15)));
         Assert.assertTrue(customerStorage.findById(body.getId()).get().getCreatedAt().isBefore(Instant.now().plusSeconds(1)));
@@ -81,7 +82,7 @@ class CustomerManagementApplicationTests {
         CustomerRequest req = CustomerRequestBuilder.builder().build();
         req.setFirstName(null);
         req.setLastName(null);
-        req.setCompanyName(null);
+        req.setCompany(null);
         req.setCity(null);
         req.setEmailAddress(null);
         req.setStreet(null);
@@ -95,7 +96,8 @@ class CustomerManagementApplicationTests {
         Assert.assertEquals(201, res.getStatusCode().value());
         Assert.assertEquals(req.getFirstName(), body.getFirstName());
         Assert.assertEquals(req.getLastName(), body.getLastName());
-        Assert.assertEquals(req.getEmailAddress(), body.getEmailAddress());
+        Assert.assertEquals(req.getCompany(), body.getCompany());
+                Assert.assertEquals(req.getEmailAddress(), body.getEmailAddress());
         Assert.assertEquals(req.getCity(), body.getCity());
         Assert.assertEquals(req.getStreet(), body.getStreet());
         Assert.assertEquals(req.getPhoneNumber(), body.getPhoneNumber());
@@ -113,7 +115,7 @@ class CustomerManagementApplicationTests {
                         CustomerRequestBuilder.builder().setLastName("dummyNamedummyNamedummyNamedummyNamedummyNamed").build(),
                         LAST_NAME_CANNOT_BE_LONGER_THAN_45_CHARACTERS),
                 Arguments.of(
-                        CustomerRequestBuilder.builder().setCompanyName("dummyNamedummyNamedummyNamedummyNamedummyNamed").build(),
+                        CustomerRequestBuilder.builder().setCompany("dummyNamedummyNamedummyNamedummyNamedummyNamed").build(),
                         COMPANY_NAME_CANNOT_BE_LONGER_THAN_45_CHARACTERS),
                 Arguments.of(
                         CustomerRequestBuilder.builder().setEmailAddress("dummy-email").build(),
@@ -154,7 +156,7 @@ class CustomerManagementApplicationTests {
         assertEquals(existing.getId(), body.getId());
         assertEquals(existing.getFirstName(), body.getFirstName());
         assertEquals(existing.getLastName(), body.getLastName());
-        assertEquals(existing.getCompanyName(), body.getCompanyName());
+        assertEquals(existing.getCompany(), body.getCompany());
         assertEquals(existing.getCity(), body.getCity());
         assertEquals(existing.getStreet(), body.getStreet());
         assertEquals(existing.getLastOverviewDate(), body.getLastOverviewDate());
@@ -187,7 +189,7 @@ class CustomerManagementApplicationTests {
         CustomerRequest reqUpdate = CustomerRequestBuilder.builder().build();
         reqUpdate.setFirstName(null);
         reqUpdate.setLastName(null);
-        reqUpdate.setCompanyName(null);
+        reqUpdate.setCompany(null);
         reqUpdate.setCity(null);
         reqUpdate.setEmailAddress(null);
         reqUpdate.setStreet(null);
@@ -205,7 +207,7 @@ class CustomerManagementApplicationTests {
         assertEquals(existing.getId(), body.getId());
         assertEquals(existing.getFirstName(), body.getFirstName());
         assertEquals(existing.getLastName(), body.getLastName());
-        assertEquals(existing.getCompanyName(), body.getCompanyName());
+        assertEquals(existing.getCompany(), body.getCompany());
         assertEquals(existing.getCity(), body.getCity());
         assertEquals(existing.getStreet(), body.getStreet());
         assertEquals(existing.getLastOverviewDate(), body.getLastOverviewDate());
