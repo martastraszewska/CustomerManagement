@@ -9,9 +9,10 @@ public class CustomerDto {
     private String id;
     private String firstName;
     private String lastName;
-    private String emailAddress;
+    private String company;
     private String city;
     private String street;
     private String phoneNumber;
+    private String emailAddress;
     private String lastOverviewDate;
 }

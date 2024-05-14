@@ -3,12 +3,13 @@ import com.example.customermanagement.api.CustomerRequest;
 public class CustomerRequestBuilder {
     private String firstName = "firstName";
     private String lastName = "lastName";
-    private String companyName = "companyName";
-    private String emailAddress = "email@Address";
+    private String company = "companyName";
+
     private String city = "city";
     private String street = "street";
     private String phoneNumber = "123456789";
-    private String lastOverviewDate = "01-01-2000";
+    private String emailAddress = "email@Address";
+    private String lastOverviewDate = "01/01/2000";
     private CustomerRequestBuilder() {
     }
     public String getFirstName() {
@@ -19,11 +20,9 @@ public class CustomerRequestBuilder {
         return this.lastName;
     }
 
-    public String getCompanyName() {return this.companyName; }
+    public String getCompany() {return this.company; }
 
-    public String getEmailAddress() {
-        return this.emailAddress;
-    }
+
 
     public String getCity() {
         return this.city;
@@ -35,6 +34,9 @@ public class CustomerRequestBuilder {
 
     public String getPhoneNumber() {
         return this.phoneNumber;
+    }
+    public String getEmailAddress() {
+        return this.emailAddress;
     }
 
     public String getLastOverviewDate() {
@@ -49,14 +51,11 @@ public class CustomerRequestBuilder {
         this.lastName = lastName;
         return this;
     }
-    public CustomerRequestBuilder setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public CustomerRequestBuilder setCompany(String company) {
+        this.company = company;
         return this;
     }
-    public CustomerRequestBuilder setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-        return this;
-    }
+
 
     public CustomerRequestBuilder setCity(String city) {
         this.city = city;
@@ -71,6 +70,10 @@ public class CustomerRequestBuilder {
         this.phoneNumber = phoneNumber;
         return this;
     }
+    public CustomerRequestBuilder setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+        return this;
+    }
 
     public CustomerRequestBuilder setLastOverviewDate(String lastOverviewDate) {
         this.lastOverviewDate = lastOverviewDate;
@@ -79,6 +82,6 @@ public class CustomerRequestBuilder {
     public static CustomerRequestBuilder builder() {
         return new CustomerRequestBuilder();
     }    public CustomerRequest build() {
-        return new CustomerRequest(firstName, lastName, companyName, emailAddress, city, street, phoneNumber, lastOverviewDate);
+        return new CustomerRequest(firstName, lastName, company,  city, street, phoneNumber, emailAddress, lastOverviewDate);
     }
 }

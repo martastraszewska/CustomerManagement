@@ -19,11 +19,11 @@ public class Customer {
     private String id;
     private String firstName;
     private String lastName;
-    private String companyName;
-    private String emailAddress;
+    private String company;
     private String city;
     private String street;
     private String phoneNumber;
+    private String emailAddress;
     private String lastOverviewDate;
     private Instant createdAt;
     private Instant updatedAt;
@@ -34,11 +34,11 @@ public class Customer {
                 .id(UUID.randomUUID().toString())
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
-                .companyName(request.getCompanyName())
-                .emailAddress(request.getEmailAddress())
+                .company(request.getCompany())
                 .city(request.getCity())
                 .street(request.getStreet())
                 .phoneNumber(request.getPhoneNumber())
+                .emailAddress(request.getEmailAddress())
                 .lastOverviewDate(request.getLastOverviewDate())
                 .createdAt(Instant.now())
                 .updatedAt(Instant.now())
@@ -48,11 +48,11 @@ public class Customer {
     public Customer update(CustomerRequest request) {
         this.firstName = request.getFirstName();
         this.lastName = request.getLastName();
-        this.companyName = request.getCompanyName();
-        this.emailAddress = request.getEmailAddress();
+        this.company = request.getCompany();
         this.city = request.getCity();
         this.street = request.getStreet();
         this.phoneNumber = request.getPhoneNumber();
+        this.emailAddress = request.getEmailAddress();
         this.lastOverviewDate = request.getLastOverviewDate();
         this.updatedAt = Instant.now();
         return this;

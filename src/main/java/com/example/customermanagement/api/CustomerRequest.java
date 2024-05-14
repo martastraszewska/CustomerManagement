@@ -13,11 +13,11 @@ public class CustomerRequest {
 
     private String firstName;
     private String lastName;
-    private String companyName;
-    private String emailAddress;
+    private String company;
     private String city;
     private String street;
     private String phoneNumber;
+    private String emailAddress;
     private String lastOverviewDate;
 
 

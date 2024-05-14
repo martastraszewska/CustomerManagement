@@ -10,11 +10,11 @@ public class CustomerResponse {
     private String id;
     private String firstName;
     private String lastName;
-    private String companyName;
-    private String emailAddress;
+    private String company;
     private String city;
     private String street;
     private String phoneNumber;
+    private String emailAddress;
     private String lastOverviewDate;
 
     public static CustomerResponse from(Customer customer) {
@@ -22,11 +22,11 @@ public class CustomerResponse {
                 .id(customer.getId())
                 .firstName(customer.getFirstName())
                 .lastName(customer.getLastName())
-                .companyName(customer.getCompanyName())
-                .emailAddress(customer.getEmailAddress())
+                .company(customer.getCompany())
                 .city(customer.getCity())
                 .street(customer.getStreet())
                 .phoneNumber(customer.getPhoneNumber())
+                .emailAddress(customer.getEmailAddress())
                 .lastOverviewDate(customer.getLastOverviewDate())
                 .build();
     }

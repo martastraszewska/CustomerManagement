@@ -28,7 +28,7 @@ public class Validator {
 
     public Validator() {
         this.pattern = Pattern.compile("^(.+)@(\\S+)$");
-        this.dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        this.dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     }
 
     public void validateCustomer(CustomerRequest request) {
@@ -36,7 +36,7 @@ public class Validator {
                 FIRST_NAME_CANNOT_BE_LONGER_THAN_45_CHARACTERS);
         throwIf(request.getLastName() != null && request.getLastName().length() > 45,
                 LAST_NAME_CANNOT_BE_LONGER_THAN_45_CHARACTERS);
-        throwIf(request.getCompanyName() != null && request.getCompanyName().length() > 45,
+        throwIf(request.getCompany() != null && request.getCompany().length() > 45,
                 COMPANY_NAME_CANNOT_BE_LONGER_THAN_45_CHARACTERS);
         throwIf(request.getEmailAddress() != null && !pattern.matcher(request.getEmailAddress()).matches(),
                 INVALID_ADDRESS_EMAIL_PATTERN);
