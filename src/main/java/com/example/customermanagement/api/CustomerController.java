@@ -1,6 +1,11 @@
 package com.example.customermanagement.api;
 
-import com.example.customermanagement.app.*;
+
+import com.example.customermanagement.app.CreateCustomerService;
+import com.example.customermanagement.app.Customer;
+import com.example.customermanagement.app.DeleteCustomerService;
+import com.example.customermanagement.app.FindCustomerService;
+import com.example.customermanagement.app.UpdateCustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 @RestController
 @RequestMapping("/api/v1/customers")
@@ -37,7 +41,7 @@ public class CustomerController {
     public ResponseEntity<CustomerResponse> createCustomer(@RequestBody CustomerRequest customerRequest) {
         Customer customer = createCustomerService.createCustomer(customerRequest);
         return ResponseEntity.created(URI.create("/api/v1/customers/" + customer.getId()))
-               .body(CustomerResponse.from(customer));
+                .body(CustomerResponse.from(customer));
     }
 
     @PutMapping("/{id}")
@@ -62,7 +66,8 @@ public class CustomerController {
     @GetMapping()
     public ResponseEntity<List<CustomerResponse>> getCustomers() {
         System.out.println("GETTING ALL CUSTOMERS");
-        List<CustomerResponse> responseList = findCustomerService.findAll().stream().map(CustomerResponse::from).toList();
+        List<CustomerResponse> responseList = findCustomerService.findAll().stream().map(CustomerResponse::from)
+                .toList();
         return ResponseEntity.ok(responseList);
     }
 }
