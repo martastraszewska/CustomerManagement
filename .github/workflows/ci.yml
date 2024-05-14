@@ -15,3 +15,5 @@ jobs:
           architecture: x64
       - name: Run the Maven verify phase
         run: mvn verify
+        env:
+          CI: ""
