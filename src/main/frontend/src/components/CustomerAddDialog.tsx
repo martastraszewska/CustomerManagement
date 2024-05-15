@@ -11,6 +11,7 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { FormLabel } from "@mui/material";
 
 interface CustomerAddDialogComponentProps {
   open: boolean;
@@ -154,9 +155,6 @@ export const CustomerAddDialog = ({
               setLastOverviewDate(event.target.value);
             }}
           ></TextField>
-          
-         
-    
         </Box>
       </DialogContent>
 
@@ -165,14 +163,8 @@ export const CustomerAddDialog = ({
         <Button
           onClick={handleSaveAddDialog}
           disabled={
-            firstName.length === 0 ||
-            lastName.length === 0 ||
-            company.length === 0 ||
-            city.length === 0 ||
-            street.length === 0 ||
-            phoneNumber.length === 0 ||
-            emailAddress.length === 0 ||
-            lastOverviewDate.length === 0
+            (firstName.length === 0 || lastName.length === 0) &&
+            company.length === 0
           }
         >
           Zapisz

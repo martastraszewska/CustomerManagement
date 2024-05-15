@@ -30,7 +30,8 @@ interface CustomerEditDialogComponentProps {
     street: string,
     phoneNumber: string,
     emailAddress: string,
-    lastOverviewDate: string,) => void;
+    lastOverviewDate: string
+  ) => void;
 }
 
 export const CustomerEditDialog = ({
@@ -76,7 +77,17 @@ export const CustomerEditDialog = ({
   const handleCloseEditDialog = () => closeDialog();
 
   const handleSaveEditDialog = async () => {
-   onEditCustomer( id, firstName, lastName, company, city, street, phoneNumber, emailAddress, lastOverviewDate);
+    onEditCustomer(
+      id,
+      firstName,
+      lastName,
+      company,
+      city,
+      street,
+      phoneNumber,
+      emailAddress,
+      lastOverviewDate
+    );
     closeDialog();
   };
 
@@ -113,7 +124,7 @@ export const CustomerEditDialog = ({
           <TextField
             id="outlined-basic"
             label="Imie"
-            variant="outlined"      
+            variant="outlined"
             defaultValue={currentRow.firstName}
             onChange={(event) => {
               setFirstName(event.target.value);
@@ -190,14 +201,8 @@ export const CustomerEditDialog = ({
         <Button
           onClick={handleSaveEditDialog}
           disabled={
-            firstName.length === 0 ||
-            lastName.length === 0 ||
-            company.length === 0 ||
-            city.length === 0 ||
-            street.length === 0 ||
-            phoneNumber.length === 0 ||
-            emailAddress.length === 0 ||
-            lastOverviewDate.length === 0
+            (firstName.length === 0 || lastName.length === 0) &&
+            company.length === 0
           }
         >
           Zapisz

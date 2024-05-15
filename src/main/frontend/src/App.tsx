@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 //import { NavigationBar } from "./components/NavigationBar";
 import { persistor, store } from "./app/store";
 import { useAppDispatch } from "./hooks/reduxCommon";
+import { NavigationBar } from "./components/NavigationBar";
 //import { ProtectedRoute } from "./routes/ProtectedRoute";
 
 const ROUTES = [
@@ -26,6 +27,7 @@ const App = () => (
   <BrowserRouter>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
+        <NavigationBar />
         <Routes>
           {ROUTES.map((route) => (
             <Route
