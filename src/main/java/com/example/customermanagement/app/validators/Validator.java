@@ -52,7 +52,7 @@ public class Validator {
         validateDate(request.getLastOverviewDate(), INVALID_DATE_PATTERN);
     }
 
-    private boolean isNotBlank(String value){
+    private boolean isNotBlank(String value) {
         return value != null && !value.isBlank();
     }
 
