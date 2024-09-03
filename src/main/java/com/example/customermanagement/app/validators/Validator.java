@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.regex.Pattern;
 
 public class Validator {
+
     public static final String FIRST_NAME_CANNOT_BE_LONGER_THAN_45_CHARACTERS =
             "First name cannot be longer than 45 characters.";
     public static final String LAST_NAME_CANNOT_BE_LONGER_THAN_45_CHARACTERS =
@@ -32,26 +33,34 @@ public class Validator {
     }
 
     public void validateCustomer(CustomerRequest request) {
-        throwIf(request.getFirstName() != null && request.getFirstName().length() > 45,
+
+
+        throwIf(isNotBlank(request.getFirstName()) && request.getFirstName().length() > 45,
                 FIRST_NAME_CANNOT_BE_LONGER_THAN_45_CHARACTERS);
-        throwIf(request.getLastName() != null && request.getLastName().length() > 45,
+        throwIf(isNotBlank(request.getLastName()) && request.getLastName().length() > 45,
                 LAST_NAME_CANNOT_BE_LONGER_THAN_45_CHARACTERS);
-        throwIf(request.getCompany() != null && request.getCompany().length() > 45,
+        throwIf(isNotBlank(request.getCompany()) && request.getCompany().length() > 45,
                 COMPANY_NAME_CANNOT_BE_LONGER_THAN_45_CHARACTERS);
-        throwIf(request.getEmailAddress() != null && !pattern.matcher(request.getEmailAddress()).matches(),
+        throwIf(isNotBlank(request.getEmailAddress()) && !pattern.matcher(request.getEmailAddress()).matches(),
                 INVALID_ADDRESS_EMAIL_PATTERN);
-        throwIf(request.getCity() != null && request.getCity().length() > 45,
+        throwIf(isNotBlank(request.getCity())  && request.getCity().length() > 45,
                 CITY_CANNOT_BE_LONGER_THAN_45_CHARACTERS);
-        throwIf(request.getStreet() != null && request.getStreet().length() > 45,
+        throwIf(isNotBlank(request.getStreet()) && request.getStreet().length() > 45,
                 STREET_CANNOT_BE_LONGER_THAN_45_CHARACTERS);
-        throwIf(request.getPhoneNumber() != null && request.getPhoneNumber().length() > 9,
+        throwIf(isNotBlank(request.getPhoneNumber()) && request.getPhoneNumber().length() > 9,
                 PHONE_NUMBER_CANNOT_BE_LONGER_THAN_9_CHARACTERS);
         validateDate(request.getLastOverviewDate(), INVALID_DATE_PATTERN);
     }
 
+    private boolean isNotBlank(String value) {
+        return value != null && !value.isBlank();
+    }
+
+
+
     private void validateDate(String date, String msg) {
         try {
-            if (date != null) {
+            if (isNotBlank(date)) {
                 dateFormat.parse(date);
             }
         } catch (ParseException e) {

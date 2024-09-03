@@ -1,5 +1,5 @@
 export enum PATH{
-    HOME = 'api/v1/',
-    CUSTOMERS_TABLE = '/'
+    HOME = '/',
+    CUSTOMERS_TABLE = '/customers'
 }
 

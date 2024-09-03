@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { Button, Box, FormControl } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
@@ -6,11 +6,25 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
-import useFormControl from "@mui/material";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import PlacesAutocomplete, { geocodeByAddress } from "react-places-autocomplete";
+
+import {
+  APIProvider,
+  Map,
+  AdvancedMarker,
+  Pin,
+  InfoWindow,
+} from "@vis.gl/react-google-maps";
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng,
+} from "use-places-autocomplete";
+import { Marker } from "@react-google-maps/api";
+import {
+  StandaloneSearchBox,
+  LoadScript,
+  GoogleMap,
+} from "@react-google-maps/api";
 
 interface CustomerAddDialogComponentProps {
   open: boolean;
@@ -24,7 +38,9 @@ interface CustomerAddDialogComponentProps {
     street: string,
     phoneNumber: string,
     emailAddress: string,
-    lastOverviewDate: string
+    lastOverviewDate: string,
+    lat: number,
+    lng: number
   ) => void;
 }
 
@@ -42,6 +58,8 @@ export const CustomerAddDialog = ({
   const [phoneNumber, setPhoneNumber] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [lastOverviewDate, setLastOverviewDate] = useState("");
+  const [lat, setLat] = useState(0);
+  const [lng, setLng] = useState(0);
 
   const handleCloseAddDialog = () => closeDialog();
 
@@ -55,7 +73,9 @@ export const CustomerAddDialog = ({
       street,
       phoneNumber,
       emailAddress,
-      lastOverviewDate
+      lastOverviewDate,
+      lat,
+      lng
     );
     closeDialog();
   };
@@ -69,8 +89,18 @@ export const CustomerAddDialog = ({
     setPhoneNumber("");
     setEmailAddress("");
     setLastOverviewDate("");
+    // setLat(0);
+    // setLng(0);
     onClose();
   };
+
+  // const [address, setAddress] = useState("");
+  // const handleSelect = async value => {
+  //  const result = geocodeByAddress(value);
+  //  const latLng = getLatLng(result);
+  //  setLat(latLng.lat)
+  //  setLng(latLng.lng)
+  // };
 
   return (
     <Dialog
@@ -154,10 +184,47 @@ export const CustomerAddDialog = ({
               setLastOverviewDate(event.target.value);
             }}
           ></TextField>
-          
-         
-    
         </Box>
+        <APIProvider
+          apiKey="AIzaSyA0gdhjHwAAXiMmib6UtQvvJgHL4rW0ydk"
+          libraries={["places"]}
+        >
+          <div style={{ height: "40vh", width: "100%" }}>
+          {/* <PlacesAutocomplete
+                value={address}
+                onChange={setAddress}
+                onSelect={handleSelect}
+              >
+                {({
+                  getInputProps,
+                  suggestions,
+                  getSuggestionItemProps,
+                  loading,
+                }) => (
+                  <div>
+                    <input {...getInputProps({ placeholder: "Wpisz adres" })} />
+                    <div>
+                      {loading ? <div> ...loading</div> : null}
+                    
+                    {suggestions.map((suggestion) => {
+                      return <div>{suggestion.description}</div>
+                    })}
+                    </div>
+                  </div>
+                )}
+              </PlacesAutocomplete> */}
+            <Map
+              gestureHandling="greedy"
+              minZoom={4}
+              maxZoom={18}
+              defaultZoom={9}
+              defaultCenter={{ lat: 52.5, lng: 16.8 }}
+              mapId="19987002ac37af02"
+            >
+        
+            </Map>
+          </div>
+        </APIProvider>
       </DialogContent>
 
       <DialogActions>
@@ -165,14 +232,8 @@ export const CustomerAddDialog = ({
         <Button
           onClick={handleSaveAddDialog}
           disabled={
-            firstName.length === 0 ||
-            lastName.length === 0 ||
-            company.length === 0 ||
-            city.length === 0 ||
-            street.length === 0 ||
-            phoneNumber.length === 0 ||
-            emailAddress.length === 0 ||
-            lastOverviewDate.length === 0
+            (firstName.length === 0 || lastName.length === 0) &&
+            company.length === 0
           }
         >
           Zapisz

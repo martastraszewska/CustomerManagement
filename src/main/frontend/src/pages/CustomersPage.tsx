@@ -8,9 +8,10 @@ import { useAppDispatch } from "../hooks/reduxCommon";
 import {
   useAddCustomerMutation,
   useEditCustomerMutation,
-  useDeleteCustomerMutation
+  useDeleteCustomerMutation,
 } from "../services/main";
 import { showError } from "../features/snackbar/snackbarSlice";
+import { latLngEquals } from "@vis.gl/react-google-maps";
 
 export const CustomersPage = () => {
   const { data } = useGetCustomersQuery();
@@ -29,7 +30,9 @@ export const CustomersPage = () => {
     street: string,
     phoneNumber: string,
     emailAddress: string,
-    lastOverviewDate: string
+    lastOverviewDate: string,
+    lat: number,
+    lng: number
   ) => {
     const result: any = await editCustomer({
       body: {
@@ -42,6 +45,8 @@ export const CustomersPage = () => {
         phoneNumber: phoneNumber,
         emailAddress: emailAddress,
         lastOverviewDate: lastOverviewDate,
+        lat: lat,
+        lng: lng,
       },
       id: id,
     });
@@ -59,7 +64,9 @@ export const CustomersPage = () => {
     street: string,
     phoneNumber: string,
     emailAddress: string,
-    lastOverviewDate: string
+    lastOverviewDate: string,
+    lat: number,
+    lng: number
   ) => {
     const result: any = await addCustomer({
       id: id,
@@ -71,25 +78,27 @@ export const CustomersPage = () => {
       phoneNumber: phoneNumber,
       emailAddress: emailAddress,
       lastOverviewDate: lastOverviewDate,
+      lat: lat,
+      lng: lng,
     });
     // if (result.error) {
     //   dispatch(showError("Error adding parameter filter"));
     // }
   };
 
-    const handleDeleteCustomer = async (id: string) => {
-      const result: any = await deleteCustomer({ id: id });
-      // if (result.error) {
-      //   dispatch(showError("Error deleting parameter filter"));
-      // }
-    };
+  const handleDeleteCustomer = async (id: string) => {
+    const result: any = await deleteCustomer({ id: id });
+    // if (result.error) {
+    //   dispatch(showError("Error deleting parameter filter"));
+    // }
+  };
 
   return (
     <CustomersTable
       data={data || []}
       onEditCustomer={handleEditCustomer}
       onAddCustomer={handleAddCustomer}
-       onDeleteCustomer={handleDeleteCustomer}
+      onDeleteCustomer={handleDeleteCustomer}
     />
   );
 };
