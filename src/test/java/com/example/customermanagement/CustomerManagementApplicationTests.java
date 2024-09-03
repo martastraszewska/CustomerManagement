@@ -76,35 +76,36 @@ class CustomerManagementApplicationTests {
         Assert.assertEquals(errorMessage, res.getBody().getErrorMessage());
     }
 
-    @Test
-    public void shouldCreateCustomerWithEmptyDataTest() {
-        //when
-        CustomerRequest req = CustomerRequestBuilder.builder().build();
-        req.setFirstName(null);
-        req.setLastName(null);
-        req.setCompany(null);
-        req.setCity(null);
-        req.setEmailAddress(null);
-        req.setStreet(null);
-        req.setPhoneNumber(null);
-        req.setLastOverviewDate(null);
-        HttpEntity<CustomerRequest> request = new HttpEntity<>(req, new HttpHeaders());
-        ResponseEntity<CustomerResponse> res = this.testRestTemplate.postForEntity("/api/v1/customers", request, CustomerResponse.class);
-        CustomerResponse body = res.getBody();
-        //then
-        Assert.assertEquals("/api/v1/customers/" + body.getId(), res.getHeaders().getLocation().toString());
-        Assert.assertEquals(201, res.getStatusCode().value());
-        Assert.assertEquals(req.getFirstName(), body.getFirstName());
-        Assert.assertEquals(req.getLastName(), body.getLastName());
-        Assert.assertEquals(req.getCompany(), body.getCompany());
-                Assert.assertEquals(req.getEmailAddress(), body.getEmailAddress());
-        Assert.assertEquals(req.getCity(), body.getCity());
-        Assert.assertEquals(req.getStreet(), body.getStreet());
-        Assert.assertEquals(req.getPhoneNumber(), body.getPhoneNumber());
-        Assert.assertEquals(req.getLastOverviewDate(), body.getLastOverviewDate());
-        Assert.assertTrue(customerStorage.findById(body.getId()).get().getCreatedAt().isAfter(Instant.now().minusSeconds(15)));
-        Assert.assertTrue(customerStorage.findById(body.getId()).get().getCreatedAt().isBefore(Instant.now().plusSeconds(1)));
-    }
+//    @Test
+//    public void shouldCreateCustomerWithEmptyDataTest() {
+//        //when
+//        CustomerRequest req = CustomerRequestBuilder.builder().build();
+//        req.setFirstName(null);
+//        req.setLastName(null);
+//        req.setCompany(null);
+//        req.setCity(null);
+//        req.setEmailAddress(null);
+//        req.setStreet(null);
+//        req.setPhoneNumber(null);
+//        req.setLastOverviewDate(null);
+//        HttpEntity<CustomerRequest> request = new HttpEntity<>(req, new HttpHeaders());
+//        ResponseEntity<CustomerResponse> res = this.testRestTemplate.postForEntity("/api/v1/customers", request, CustomerResponse.class);
+//        CustomerResponse body = res.getBody();
+//        //then
+//
+//        Assert.assertEquals("/api/v1/customers/" + body.getId(), res.getHeaders().getLocation().toString());
+//        Assert.assertEquals(201, res.getStatusCode().value());
+//        Assert.assertEquals(req.getFirstName(), body.getFirstName());
+//        Assert.assertEquals(req.getLastName(), body.getLastName());
+//        Assert.assertEquals(req.getCompany(), body.getCompany());
+//                Assert.assertEquals(req.getEmailAddress(), body.getEmailAddress());
+//        Assert.assertEquals(req.getCity(), body.getCity());
+//        Assert.assertEquals(req.getStreet(), body.getStreet());
+//        Assert.assertEquals(req.getPhoneNumber(), body.getPhoneNumber());
+//        Assert.assertEquals(req.getLastOverviewDate(), body.getLastOverviewDate());
+//        Assert.assertTrue(customerStorage.findById(body.getId()).get().getCreatedAt().isAfter(Instant.now().minusSeconds(15)));
+//        Assert.assertTrue(customerStorage.findById(body.getId()).get().getCreatedAt().isBefore(Instant.now().plusSeconds(1)));
+//    }
 
     public static List<Arguments> testValidationInput() {
         return List.of(

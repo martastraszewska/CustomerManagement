@@ -9,4 +9,6 @@ export interface Customer {
   phoneNumber: string;
   emailAddress: string;
   lastOverviewDate: string;
+  lat: number;
+  lng: number;
 }

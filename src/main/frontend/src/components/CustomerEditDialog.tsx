@@ -19,6 +19,8 @@ interface CustomerEditDialogComponentProps {
     phoneNumber: string;
     emailAddress: string;
     lastOverviewDate: string;
+    lat: number;
+    lng: number;
   };
   onClose: () => void;
   onEditCustomer: (
@@ -30,7 +32,9 @@ interface CustomerEditDialogComponentProps {
     street: string,
     phoneNumber: string,
     emailAddress: string,
-    lastOverviewDate: string
+    lastOverviewDate: string,
+    lat: number,
+    lng: number,
   ) => void;
 }
 
@@ -51,6 +55,8 @@ export const CustomerEditDialog = ({
   const [lastOverviewDate, setLastOverviewDate] = useState(
     currentRow.lastOverviewDate
   );
+  const[lat, setLat] = useState(currentRow.lat);
+  const[lng, setLng] = useState(currentRow.lng);
 
   useEffect(() => {
     setId(currentRow.id);
@@ -62,6 +68,8 @@ export const CustomerEditDialog = ({
     setPhoneNumber(currentRow.phoneNumber);
     setEmailAddress(currentRow.emailAddress);
     setLastOverviewDate(currentRow.lastOverviewDate);
+    setLat(currentRow.lat);
+    setLng(currentRow.lng);
   }, [
     currentRow.id,
     currentRow.firstName,
@@ -72,6 +80,8 @@ export const CustomerEditDialog = ({
     currentRow.phoneNumber,
     currentRow.emailAddress,
     currentRow.lastOverviewDate,
+    currentRow.lat,
+    currentRow.lng
   ]);
 
   const handleCloseEditDialog = () => closeDialog();
@@ -86,7 +96,9 @@ export const CustomerEditDialog = ({
       street,
       phoneNumber,
       emailAddress,
-      lastOverviewDate
+      lastOverviewDate,
+      lat,
+      lng
     );
     closeDialog();
   };
@@ -100,6 +112,8 @@ export const CustomerEditDialog = ({
     setPhoneNumber("");
     setEmailAddress("");
     setLastOverviewDate("");
+    setLat(0);
+    setLng(0);
     onClose();
   };
 
